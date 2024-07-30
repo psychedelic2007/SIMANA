@@ -1,8 +1,6 @@
-Bio==1.7.1
 biopython==1.79
 biotite==0.40.0
 matplotlib==3.8.0
-MDAnalysis==2.7.0
 MDAnalysis==2.7.0
 numpy==1.23.5
 rdkit==2023.9.5
