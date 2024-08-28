@@ -6,3 +6,4 @@ seaborn==0.13.2
 MDAnalysis==2.7.0
 scikit-learn==1.5.1
 rdkit-pypi==2022.9.5
+ramachandraw==1.0.1
