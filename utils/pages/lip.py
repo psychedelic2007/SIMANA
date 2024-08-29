@@ -63,10 +63,25 @@ def plot_distributions(data):
 def lip():
     st.title("Lipinski's Rule of Five Calculator")
 
-    # File upload
-    uploaded_file = st.file_uploader("Upload a text file containing SMILES notations", type=["txt"])
+    # Single SMILES input
+    single_smiles = st.text_input("Paste a single SMILES notation")
 
-    if uploaded_file is not None:
+    # File upload
+    uploaded_file = st.file_uploader("Or upload a text file containing SMILES notations", type=["txt"])
+
+    if single_smiles:
+        # Process the single SMILES input
+        result = calculate_lipinski(single_smiles.strip())
+        if result:
+            mol_weight, num_h_donors, num_h_acceptors, logp, follows_rule, violation_details = result
+            st.write(f"**Molecular Weight:** {mol_weight:.2f}")
+            st.write(f"**Number of Hydrogen Donors:** {num_h_donors}")
+            st.write(f"**Number of Hydrogen Acceptors:** {num_h_acceptors}")
+            st.write(f"**LogP:** {logp:.2f}")
+            st.write(f"**Follows Lipinski's Rule:** {follows_rule}")
+            st.write(f"**Violations:** {violation_details}")
+
+    elif uploaded_file is not None:
         smiles_list = uploaded_file.read().decode("utf-8").splitlines()
 
         if st.button("Submit"):
