@@ -81,7 +81,9 @@ def home_page():
     	st.image("utils/images/tutorial.gif", use_column_width=True)
     
     st.write('''***''')
-    
+
+    st.title("Authors")
+	
     # Load images and convert to base64
     satyam_image = load_image("utils/images/sat.jpg")
     arshad_image = load_image("utils/images/arshad.jpg")
