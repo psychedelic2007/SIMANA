@@ -8,7 +8,7 @@ def load_image(image_path):
         return base64.b64encode(image_file.read()).decode()
 
 # Load images and convert to base64
-satyam_image = load_image("utils/images/satyam.jpg")
+satyam_image = load_image("utils/images/sat.jpg")
 arshad_image = load_image("utils/images/arshad.jpg")
 
 def home_page():
@@ -83,7 +83,7 @@ def home_page():
     st.write('''***''')
     
     # Load images and convert to base64
-    satyam_image = load_image("utils/images/satyam.jpg")
+    satyam_image = load_image("utils/images/sat.jpg")
     arshad_image = load_image("utils/images/arshad.jpg")
 	
     # Define custom CSS for circular images
