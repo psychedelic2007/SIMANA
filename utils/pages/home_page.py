@@ -137,11 +137,10 @@ def home_page():
     st.write('''***''')	
     footer = """
     <div style="position: relative; bottom: 0; width: 100%; padding: 10px 0; text-align: relative;">
-        <p>SIMANA © 2024 | <a href="https://github.com/psychedelic2007" target="_blank" style="text-decoration: none;">GitHub</a> | <a href="https://www.researchgate.net/profile/Satyam-Sangeet" target="_blank" style="text-decoration: none;">Researchgate</a> | <a href="https://your_contact_page_url" target="_blank" style="text-decoration: none;">Contact</a></p>
+        <p>| SIMANA © 2024 | Contact </p>
     </div>
     """
     st.markdown(footer, unsafe_allow_html=True)
 
 if __name__ == "__main__":
     home_page()
-    add_footer()
