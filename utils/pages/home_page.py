@@ -137,7 +137,7 @@ def home_page():
     st.write('''***''')	
     footer = """
     <div style="position: relative; bottom: 0; width: 100%; padding: 10px 0; text-align: relative;">
-        <p>| SIMANA © 2024 | Contact </p>
+        <h3>| SIMANA © 2024 | Contact </h3>
     </div>
     """
     st.markdown(footer, unsafe_allow_html=True)
