@@ -115,7 +115,7 @@ def home_page():
                 <p><a href="https://scholar.google.com.au/citations?user=GgF3yTYAAAAJ&hl=en" target="_blank" style="text-decoration: none;">Google Scholar</a> |
                 <a href="https://www.researchgate.net/profile/Satyam-Sangeet" target="_blank" style="text-decoration: none;">ResearchGate</a> |
                 <a href="https://github.com/psychedelic2007" target="_blank" style="text-decoration: none;">Github</a> |
-                <a herf="https://psychedelic2007.github.io/" target="_blank" style="text-decoration: none;">Personel Webpage</a></p>
+                <a herf="https://psychedelic2007.github.io" target="_blank" style="text-decoration: none;">Personel Webpage</a></p>
             </div>
             """,
             unsafe_allow_html=True,
