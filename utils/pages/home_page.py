@@ -1,7 +1,7 @@
 import streamlit as st
 import base64
 
-st.set_page_config(layout="wide")  # Set the page layout to wide
+st.set_page_config(layout="wide", page_title="SIMANA", page_icon="utils/images/logo.svg")  # Set the page layout to wide
 
 def load_image(image_path):
     with open(image_path, "rb") as image_file:
