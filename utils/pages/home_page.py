@@ -22,7 +22,7 @@ def home_page():
     # Right column content
     with col2:
         st.markdown("""
-        <h1>Welcome to <span style="color:cyan;">SIM</span>ulation <span style="color:cyan;">ANA</span>lysis</h1>
+        <h1>Welcome to <span style="color:magenta;">SIM</span>ulation <span style="color:magenta;">ANA</span>lysis (SIMANA)</h1>
         <p>Navigate the Depths of Data with Ease</p>
         <p>SIMANA: Where Complex Simulations Find Simplicity in Analysis</p>
         """, unsafe_allow_html=True)
