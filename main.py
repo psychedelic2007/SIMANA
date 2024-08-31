@@ -15,6 +15,7 @@ from utils.pages.bfactor import bfactor
 from utils.pages.boiled_egg import boiled_egg
 from utils.pages.lip import lip
 from utils.pages.rama import rama
+from utils.pages.contact_map import contact_map
 
 app = MultiApp()
 app.add_app("Home Page", home_page)
@@ -25,8 +26,9 @@ app.add_app("Solvent Accessible Surface Area", sasa)
 app.add_app("Hydrogen Bond", hbond)
 app.add_app("Dynamic Cross Correlation Analysis", dccm)
 app.add_app("Prinicpal Component Analysis", pca)
+app.add_app("Ramachandran Map", rama)
+app.add_app("Contact Map", contact_map)
 app.add_app("BFactor Analysis", bfactor)
 app.add_app("Boiled Egg Analysis", boiled_egg)
 app.add_app("Lipinski Calculation", lip)
-app.add_app("Ramachandran Map", rama)
 app.run()
