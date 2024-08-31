@@ -9,7 +9,7 @@ def load_image(image_path):
 
 # Load images and convert to base64
 satyam_image = load_image("utils/images/sat.jpg")
-arshad_image = load_image("utils/images/arshad.jpg")
+arshad_image = load_image("utils/images/ars.jpg")
 
 def home_page():
     # Create two columns
@@ -86,7 +86,7 @@ def home_page():
 	
     # Load images and convert to base64
     satyam_image = load_image("utils/images/sat.jpg")
-    arshad_image = load_image("utils/images/arshad.jpg")
+    arshad_image = load_image("utils/images/ars.jpg")
 	
     # Define custom CSS for circular images
     circular_image_css = """
