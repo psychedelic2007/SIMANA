@@ -53,7 +53,7 @@ def plot_dccm(dccm, customizations):
 
 # Main Streamlit app
 def dccm():
-    st.title('DCCM Analysis')
+    st.title('Dynamic Cross Correlation Matrix Analysis')
 
     if 'dccm_data' not in st.session_state:
         st.session_state.dccm_data = None
