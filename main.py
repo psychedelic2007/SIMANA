@@ -1,6 +1,7 @@
 import warnings
 warnings.simplefilter(action="ignore", category=FutureWarning)
 import streamlit as st
+st.set_page_config(layout="wide", page_title="SIMANA", page_icon="utils/images/logo.svg")  # Set the page layout to wide
 from streamlit.components.v1 import html
 from multiapp import MultiApp
 from utils.pages.home_page import home_page
@@ -16,6 +17,7 @@ from utils.pages.boiled_egg import boiled_egg
 from utils.pages.lip import lip
 from utils.pages.rama import rama
 from utils.pages.contact_map import contact_map
+from utils.pages.tutorial import tutorial
 
 app = MultiApp()
 app.add_app("Home Page", home_page)
@@ -31,4 +33,5 @@ app.add_app("Contact Map", contact_map)
 app.add_app("BFactor Analysis", bfactor)
 app.add_app("Boiled Egg Analysis", boiled_egg)
 app.add_app("Lipinski Calculation", lip)
+app.add_app("Tutorial", tutorial)
 app.run()
