@@ -8,3 +8,4 @@ scikit-learn==1.5.1
 rdkit-pypi==2022.9.5
 ramachandraw==1.0.1
 rdkit==2024.3.5
+libxrender1
