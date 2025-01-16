@@ -246,7 +246,7 @@ def lip2():
         with col1:
             st.write("**Basic Properties:**")
             st.write(f"**Molecular Weight:** {selected_compound['MW']:.2f}")
-            st.write(f"**LogP:** {selected_compound['logP']:.2f}")
+            st.write(f"**LogP:** {selected_compound['LogP']:.2f}")
             st.write(f"**Polar Surface Area:** {selected_compound['TPSA']:.2f}")
             st.write(f"**Ring Count:** {selected_compound['nRing']}")
             st.write(f"**Follows Lipinski's Rule:** {selected_compound['FollowsLipinski']}")
