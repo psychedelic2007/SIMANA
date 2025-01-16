@@ -11,6 +11,19 @@ import seaborn as sns
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 
+import streamlit as st
+from rdkit import Chem
+from rdkit.Chem import Descriptors, Draw
+from rdkit.Chem import AllChem
+from rdkit.Chem import rdMolDescriptors
+from rdkit.Chem.Draw import IPythonConsole
+from io import StringIO, BytesIO
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+from sklearn.preprocessing import MinMaxScaler
+
 def calculate_properties(smiles):
     mol = Chem.MolFromSmiles(smiles)
     if mol is None:
@@ -19,7 +32,7 @@ def calculate_properties(smiles):
     # Calculate all properties
     properties = {
         "MW": Descriptors.ExactMolWt(mol),
-        "nRig": rdMolDescriptors.CalcNumRigidBonds(mol),
+        "nBonds": mol.GetNumBonds(),  # Replaced nRig with total number of bonds
         "fChar": Chem.GetFormalCharge(mol),
         "nHet": rdMolDescriptors.CalcNumHeteroatoms(mol),
         "MaxRing": max([len(ring) for ring in mol.GetRingInfo().AtomRings()]) if mol.GetRingInfo().AtomRings() else 0,
@@ -69,7 +82,7 @@ def plot_radar_normalized(selected_compound):
     # Define property ranges (based on drug-like molecules)
     ranges = {
         "MW": (160, 500),
-        "nRig": (0, 20),
+        "nBonds": (0, 50),
         "fChar": (-2, 2),
         "nHet": (0, 10),
         "MaxRing": (0, 7),
