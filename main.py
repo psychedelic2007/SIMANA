@@ -15,6 +15,7 @@ from utils.pages.pca import pca
 from utils.pages.bfactor import bfactor
 from utils.pages.boiled_egg import boiled_egg
 from utils.pages.lip import lip
+from utils.pages.lip1 import lip1
 from utils.pages.rama import rama
 from utils.pages.contact_map import contact_map
 from utils.pages.tutorial import tutorial
@@ -33,5 +34,6 @@ app.add_app("Contact Map", contact_map)
 app.add_app("BFactor Analysis", bfactor)
 app.add_app("Boiled Egg Analysis", boiled_egg)
 app.add_app("Lipinski Calculation", lip)
+app.add_app("Lip1", lip1)
 app.add_app("Tutorial", tutorial)
 app.run()
