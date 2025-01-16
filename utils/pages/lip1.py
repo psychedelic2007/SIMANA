@@ -103,8 +103,6 @@ def lip1():
         st.session_state.compound_names = None
     if 'processed_data' not in st.session_state:
         st.session_state.processed_data = None
-    if 'show_distribution' not in st.session_state:
-        st.session_state.show_distribution = True
     if 'analyzed' not in st.session_state:
         st.session_state.analyzed = False
 
@@ -117,16 +115,17 @@ def lip1():
         uploaded_file = st.file_uploader("Upload a text file containing SMILES notations", type=["txt"])
         if uploaded_file is not None:
             smiles_list = uploaded_file.read().decode("utf-8").splitlines()
+            smiles_list = [s.strip() for s in smiles_list if s.strip()]
     else:
         smiles_input = st.text_area("Enter SMILES notations (one per line)")
         if smiles_input:
-            smiles_list = smiles_input.splitlines()
+            smiles_list = [s.strip() for s in smiles_input.splitlines() if s.strip()]
     
     # Analyze button
     if st.button("Analyze Compounds"):
         if smiles_list:
             # Process SMILES and calculate properties
-            compounds = [calculate_properties(smiles.strip()) for smiles in smiles_list if smiles.strip()]
+            compounds = [calculate_properties(smiles) for smiles in smiles_list]
             compounds = [c for c in compounds if c is not None]
             
             if not compounds:
@@ -148,61 +147,57 @@ def lip1():
                 "HAcceptors": c["HAcceptors"]
             } for c in compounds])
             st.session_state.analyzed = True
-            st.session_state.show_distribution = True
-            st.experimental_rerun()
 
     # Show results if analysis has been performed
     if st.session_state.analyzed and st.session_state.compounds:
-        # Show distribution plots if enabled
-        if st.session_state.show_distribution:
+        # Only show distribution plots if there are multiple compounds
+        if len(st.session_state.compounds) > 1:
             st.subheader("Property Distributions")
             fig = plot_distributions(st.session_state.processed_data)
             st.pyplot(fig)
+            
+            # Download button (only for multiple compounds)
+            st.download_button(
+                "Download Lipinski Data CSV",
+                data=st.session_state.processed_data.to_csv(index=False),
+                file_name="lipinski_data.csv",
+                mime="text/csv"
+            )
 
-        # Download button
-        st.download_button(
-            "Download Lipinski Data CSV",
-            data=st.session_state.processed_data.to_csv(index=False),
-            file_name="lipinski_data.csv",
-            mime="text/csv"
-        )
-
-        # Compound selection
-        st.subheader("Select a compound for detailed analysis")
-        selected_compound_name = st.selectbox(
-            "Choose a compound",
-            st.session_state.compound_names,
-            key='compound_selector'
-        )
-
-        if selected_compound_name:
+        # For multiple compounds, show compound selection
+        if len(st.session_state.compounds) > 1:
+            st.subheader("Select a compound for detailed analysis")
+            selected_compound_name = st.selectbox(
+                "Choose a compound",
+                st.session_state.compound_names,
+                key='compound_selector'
+            )
             selected_idx = st.session_state.compound_names.index(selected_compound_name)
-            selected_compound = st.session_state.compounds[selected_idx]
+        else:
+            # For single compound, just use the first one
+            selected_idx = 0
 
-            # Hide distribution plots when compound is selected
-            if st.session_state.show_distribution:
-                st.session_state.show_distribution = False
-                st.experimental_rerun()
+        selected_compound = st.session_state.compounds[selected_idx]
 
-            # Display compound details in columns
-            col1, col2, col3 = st.columns([1, 1, 1])
-            
-            with col1:
-                st.write(f"**Molecular Weight:** {selected_compound['MolWt']:.2f}")
-                st.write(f"**LogP:** {selected_compound['LogP']:.2f}")
-                st.write(f"**Polar Surface Area:** {selected_compound['PSA']:.2f}")
-                st.write(f"**Ring Count:** {selected_compound['RingCount']}")
-                st.write(f"**Follows Lipinski's Rule:** {selected_compound['FollowsLipinski']}")
-                st.write(f"**Violations:** {selected_compound['Violations']}")
-                st.write(f"**Atom Distribution:** {selected_compound['AtomDistribution']}")
-            
-            with col2:
-                img = Draw.MolToImage(selected_compound['Mol'], size=(500, 500), dpi=1200)
-                st.image(img, caption="2D Structure", use_column_width=True)
-            
-            with col3:
-                radar_fig = plot_radar_normalized(selected_compound)
-                st.pyplot(radar_fig)
+        # Display compound details in columns
+        col1, col2, col3 = st.columns([1, 1, 1])
+        
+        with col1:
+            st.write(f"**Molecular Weight:** {selected_compound['MolWt']:.2f}")
+            st.write(f"**LogP:** {selected_compound['LogP']:.2f}")
+            st.write(f"**Polar Surface Area:** {selected_compound['PSA']:.2f}")
+            st.write(f"**Ring Count:** {selected_compound['RingCount']}")
+            st.write(f"**Follows Lipinski's Rule:** {selected_compound['FollowsLipinski']}")
+            st.write(f"**Violations:** {selected_compound['Violations']}")
+            st.write(f"**Atom Distribution:** {selected_compound['AtomDistribution']}")
+        
+        with col2:
+            img = Draw.MolToImage(selected_compound['Mol'], size=(500, 500), dpi=1200)
+            st.image(img, caption="2D Structure", use_column_width=True)
+        
+        with col3:
+            radar_fig = plot_radar_normalized(selected_compound)
+            st.pyplot(radar_fig)
 
 if __name__ == "__main__":
     lip1()
