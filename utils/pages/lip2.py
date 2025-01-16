@@ -201,7 +201,7 @@ def lip2():
             st.session_state.processed_data = pd.DataFrame([{
                 "SMILES": smiles_list[i],
                 "MW": c["MW"],
-                "LogP": c["logP"],
+                "LogP": c["LogP"],
                 "TPSA": c["TPSA"],
                 "nRing": c["nRing"],
                 "nHD": c["nHD"],
