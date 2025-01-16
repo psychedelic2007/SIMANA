@@ -96,6 +96,18 @@ def plot_radar_normalized(selected_compound):
 def lip1():
     st.title("Lipinski's Rule of Five Calculator")
     
+    # Initialize session state variables
+    if 'compounds' not in st.session_state:
+        st.session_state.compounds = None
+    if 'compound_names' not in st.session_state:
+        st.session_state.compound_names = None
+    if 'processed_data' not in st.session_state:
+        st.session_state.processed_data = None
+    if 'show_distribution' not in st.session_state:
+        st.session_state.show_distribution = True
+    if 'analyzed' not in st.session_state:
+        st.session_state.analyzed = False
+
     # Input method selection
     input_method = st.radio("Choose input method:", ["Upload File", "Manual Input"])
     
@@ -103,68 +115,75 @@ def lip1():
     
     if input_method == "Upload File":
         uploaded_file = st.file_uploader("Upload a text file containing SMILES notations", type=["txt"])
-        if uploaded_file:
+        if uploaded_file is not None:
             smiles_list = uploaded_file.read().decode("utf-8").splitlines()
     else:
         smiles_input = st.text_area("Enter SMILES notations (one per line)")
         if smiles_input:
             smiles_list = smiles_input.splitlines()
     
-    # Initialize session state for distribution plot visibility
-    if 'show_distribution' not in st.session_state:
-        st.session_state.show_distribution = True
-    
-    # Always show the Analyze button
-    analyze_button = st.button("Analyze Compounds")
-    
-    if analyze_button and smiles_list:
-        # Process SMILES and calculate properties
-        compounds = [calculate_properties(smiles.strip()) for smiles in smiles_list if smiles.strip()]
-        compounds = [c for c in compounds if c is not None]  # Remove None values
-        
-        if not compounds:
-            st.error("No valid SMILES notations found. Please check your input.")
-            return
-        
-        compound_names = [f"Compound {i+1}" for i in range(len(compounds))]
-        
-        data = pd.DataFrame([{
-            "SMILES": c["SMILES"],
-            "MolWt": c["MolWt"],
-            "LogP": c["LogP"],
-            "PSA": c["PSA"],
-            "RingCount": c["RingCount"],
-            "HDonors": c["HDonors"],
-            "HAcceptors": c["HAcceptors"]
-        } for c in compounds])
-        
-        st.session_state['processed_data'] = data
-        st.session_state['compounds'] = compounds
-        st.session_state['compound_names'] = compound_names
-        st.session_state['plot_figure'] = plot_distributions(data)
-        
-        # Show distribution plots
+    # Analyze button
+    if st.button("Analyze Compounds"):
+        if smiles_list:
+            # Process SMILES and calculate properties
+            compounds = [calculate_properties(smiles.strip()) for smiles in smiles_list if smiles.strip()]
+            compounds = [c for c in compounds if c is not None]
+            
+            if not compounds:
+                st.error("No valid SMILES notations found. Please check your input.")
+                return
+            
+            compound_names = [f"Compound {i+1}" for i in range(len(compounds))]
+            
+            # Store in session state
+            st.session_state.compounds = compounds
+            st.session_state.compound_names = compound_names
+            st.session_state.processed_data = pd.DataFrame([{
+                "SMILES": c["SMILES"],
+                "MolWt": c["MolWt"],
+                "LogP": c["LogP"],
+                "PSA": c["PSA"],
+                "RingCount": c["RingCount"],
+                "HDonors": c["HDonors"],
+                "HAcceptors": c["HAcceptors"]
+            } for c in compounds])
+            st.session_state.analyzed = True
+            st.session_state.show_distribution = True
+            st.experimental_rerun()
+
+    # Show results if analysis has been performed
+    if st.session_state.analyzed and st.session_state.compounds:
+        # Show distribution plots if enabled
         if st.session_state.show_distribution:
-            st.pyplot(st.session_state['plot_figure'])
-        
-        # Download button for data
+            st.subheader("Property Distributions")
+            fig = plot_distributions(st.session_state.processed_data)
+            st.pyplot(fig)
+
+        # Download button
         st.download_button(
             "Download Lipinski Data CSV",
-            data=data.to_csv(index=False),
+            data=st.session_state.processed_data.to_csv(index=False),
             file_name="lipinski_data.csv",
             mime="text/csv"
         )
-        
+
         # Compound selection
         st.subheader("Select a compound for detailed analysis")
-        selected_compound_name = st.selectbox("Choose a compound", compound_names)
-        
+        selected_compound_name = st.selectbox(
+            "Choose a compound",
+            st.session_state.compound_names,
+            key='compound_selector'
+        )
+
         if selected_compound_name:
+            selected_idx = st.session_state.compound_names.index(selected_compound_name)
+            selected_compound = st.session_state.compounds[selected_idx]
+
             # Hide distribution plots when compound is selected
-            st.session_state.show_distribution = False
-            
-            selected_compound = compounds[compound_names.index(selected_compound_name)]
-            
+            if st.session_state.show_distribution:
+                st.session_state.show_distribution = False
+                st.experimental_rerun()
+
             # Display compound details in columns
             col1, col2, col3 = st.columns([1, 1, 1])
             
