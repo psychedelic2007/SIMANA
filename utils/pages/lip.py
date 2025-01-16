@@ -154,7 +154,7 @@ def plot_radar_normalized(selected_compound):
     plt.title("Molecular Properties Radar Plot", pad=20)
     return fig
 
-def lip2():
+def lip():
     st.title("Lipinski's Rule of Five Calculator")
     
     # Initialize session state variables
@@ -262,4 +262,4 @@ def lip2():
             st.pyplot(radar_fig)
 
 if __name__ == "__main__":
-    lip2()
+    lip()
