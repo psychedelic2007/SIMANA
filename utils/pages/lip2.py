@@ -24,15 +24,28 @@ import seaborn as sns
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 
+import streamlit as st
+from rdkit import Chem
+from rdkit.Chem import Descriptors, Draw
+from rdkit.Chem import AllChem
+from rdkit.Chem import rdMolDescriptors
+from rdkit.Chem.Draw import IPythonConsole
+from io import StringIO, BytesIO
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+from sklearn.preprocessing import MinMaxScaler
+
 def calculate_properties(smiles):
     mol = Chem.MolFromSmiles(smiles)
     if mol is None:
         return None
     
-    # Calculate all properties
+    # Calculate all properties with consistent naming
     properties = {
         "MW": Descriptors.ExactMolWt(mol),
-        "nBonds": mol.GetNumBonds(),  # Replaced nRig with total number of bonds
+        "nBonds": mol.GetNumBonds(),
         "fChar": Chem.GetFormalCharge(mol),
         "nHet": rdMolDescriptors.CalcNumHeteroatoms(mol),
         "MaxRing": max([len(ring) for ring in mol.GetRingInfo().AtomRings()]) if mol.GetRingInfo().AtomRings() else 0,
@@ -41,18 +54,18 @@ def calculate_properties(smiles):
         "TPSA": Descriptors.TPSA(mol),
         "nHD": Descriptors.NumHDonors(mol),
         "nHA": Descriptors.NumHAcceptors(mol),
-        "logD": Descriptors.MolLogP(mol),  # Approximation at pH 7.4
-        "logS": Descriptors.MolLogP(mol) - 0.89,  # Rough approximation
-        "logP": Descriptors.MolLogP(mol),
+        "LogP": Descriptors.MolLogP(mol),  # Changed from logP to LogP
+        "LogD": Descriptors.MolLogP(mol),  # Changed from logD to LogD
+        "LogS": Descriptors.MolLogP(mol) - 0.89,  # Changed from logS to LogS
         "SC": len(Chem.FindMolChiralCenters(mol))
     }
     
-    # Add violations check
+    # Add violations check with consistent naming
     violations = []
     if properties["MW"] > 500: violations.append("MolWt > 500")
     if properties["nHD"] > 5: violations.append("HDonors > 5")
     if properties["nHA"] > 10: violations.append("HAcceptors > 10")
-    if properties["logP"] > 5: violations.append("LogP > 5")
+    if properties["LogP"] > 5: violations.append("LogP > 5")  # Updated to match property name
     
     properties["FollowsLipinski"] = "No" if violations else "Yes"
     properties["Violations"] = ", ".join(violations) if violations else "--"
@@ -72,14 +85,14 @@ def plot_distributions(data):
     sns.histplot(data['MW'], ax=axs[0, 0], kde=True).set(title='Molecular Weight')
     sns.histplot(data['nHD'], ax=axs[0, 1], kde=True).set(title='H Donors')
     sns.histplot(data['nHA'], ax=axs[0, 2], kde=True).set(title='H Acceptors')
-    sns.histplot(data['logP'], ax=axs[1, 0], kde=True).set(title='LogP')
+    sns.histplot(data['LogP'], ax=axs[1, 0], kde=True).set(title='LogP')  # Updated from logP to LogP
     sns.histplot(data['nRing'], ax=axs[1, 1], kde=True).set(title='Ring Count')
     sns.histplot(data['TPSA'], ax=axs[1, 2], kde=True).set(title='Polar Surface Area')
     plt.tight_layout()
     return fig
 
 def plot_radar_normalized(selected_compound):
-    # Define property ranges (based on drug-like molecules)
+    # Define property ranges with consistent naming
     ranges = {
         "MW": (160, 500),
         "nBonds": (0, 50),
@@ -91,9 +104,9 @@ def plot_radar_normalized(selected_compound):
         "TPSA": (0, 140),
         "nHD": (0, 5),
         "nHA": (0, 10),
-        "logD": (-3, 5),
-        "logS": (-6, 1),
-        "logP": (-3, 5)
+        "LogD": (-3, 5),  # Updated from logD to LogD
+        "LogS": (-6, 1),  # Updated from logS to LogS
+        "LogP": (-3, 5)   # Updated from logP to LogP
     }
     
     # Normalize values between 0 and 1
