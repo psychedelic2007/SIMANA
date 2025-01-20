@@ -17,6 +17,7 @@ from utils.pages.boiled_egg import boiled_egg
 from utils.pages.lip import lip
 from utils.pages.rama import rama
 from utils.pages.contact_map import contact_map
+from utils.pages.tanimoto import tanimoto
 from utils.pages.tutorial import tutorial
 
 app = MultiApp()
@@ -33,5 +34,6 @@ app.add_app("Contact Map", contact_map)
 app.add_app("BFactor Analysis", bfactor)
 app.add_app("Boiled Egg Analysis", boiled_egg)
 app.add_app("Lipinski Calculation", lip)
+app.add_app("Tanimoto Similarity Analysis", tanimoto)
 app.add_app("Tutorial", tutorial)
 app.run()
